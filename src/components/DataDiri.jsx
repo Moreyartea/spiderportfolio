@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const data = [
   {
     label: "Nama Lengkap",
@@ -90,6 +92,7 @@ export default function DataDiri() {
           MAIN CONTENT
       ========================================================= */}
       <div className="relative max-w-6xl mx-auto">
+
         {/* SECTION LABEL */}
         <div className="flex flex-wrap items-center gap-4 mb-6">
           <span className="inline-block px-4 py-1.5 bg-[#FFD400] border-2 border-black text-black text-xs font-black tracking-wider shadow-[3px_3px_0px_#000]">
@@ -127,6 +130,7 @@ export default function DataDiri() {
             IDENTITY CARD
         ===================================================== */}
         <div className="relative bg-[#FFF4E0] border-4 border-black shadow-[10px_10px_0px_#000] rotate-[-0.3deg] overflow-hidden">
+
           {/* CARD TOP BAR */}
           <div className="flex items-center justify-between px-5 md:px-7 py-3 bg-[#E62429] border-b-4 border-black">
             <span className="text-white text-[10px] md:text-xs font-black tracking-[0.2em]">
@@ -140,10 +144,12 @@ export default function DataDiri() {
 
           {/* CARD BODY */}
           <div className="grid md:grid-cols-[240px_1fr] gap-0">
+
             {/* =================================================
                 PROFILE PANEL
             ================================================= */}
             <div className="relative bg-[#FFD9C7] border-b-4 md:border-b-0 md:border-r-4 border-black p-6 md:p-8 flex flex-col items-center justify-center min-h-[280px]">
+
               {/* Decorative corner */}
               <div className="absolute top-4 left-4 w-5 h-5 bg-[#FFD400] border-2 border-black rotate-[-8deg]" />
 
@@ -151,6 +157,7 @@ export default function DataDiri() {
 
               {/* Avatar placeholder */}
               <div className="relative w-36 h-40 md:w-40 md:h-44 bg-white border-4 border-black shadow-[6px_6px_0px_#000] rotate-[1deg] flex items-center justify-center overflow-hidden">
+
                 <img
                   src="/assets/foto-profil.png"
                   alt="Foto profil Fatih Taqiyyuddin"
@@ -175,7 +182,7 @@ export default function DataDiri() {
 
               <div className="mt-5 text-center">
                 <p className="font-comic text-2xl text-black">
-                  FATIH
+                  FATIH TAQIYYUDDIN
                 </p>
 
                 <p className="text-[9px] font-black tracking-[0.2em] text-black/50 mt-1">
@@ -188,7 +195,9 @@ export default function DataDiri() {
                 INFORMATION PANEL
             ================================================= */}
             <div className="p-5 md:p-8">
+
               <div className="grid sm:grid-cols-2 gap-4">
+
                 {data.map((item, i) => (
                   <div
                     key={item.label}
@@ -198,7 +207,8 @@ export default function DataDiri() {
                         : "rotate-[0.4deg]"
                     }`}
                   >
-                    {/* ================================================
+
+                    {/* =================================================
                         DOSSIER LABEL
                     ================================================= */}
                     <div
@@ -210,14 +220,16 @@ export default function DataDiri() {
                     >
                       <span
                         className={`text-[8px] md:text-[9px] font-black tracking-[0.15em] ${
-                          i % 2 === 0 ? "text-black" : "text-white"
+                          i % 2 === 0
+                            ? "text-black"
+                            : "text-white"
                         }`}
                       >
                         FILE // {String(i + 1).padStart(2, "0")}
                       </span>
                     </div>
 
-                    {/* ================================================
+                    {/* =================================================
                         COMIC REGISTRATION MARK
                     ================================================= */}
                     <span className="absolute top-3 right-4 text-[8px] font-black text-black/25 tracking-wider">
@@ -225,6 +237,7 @@ export default function DataDiri() {
                     </span>
 
                     <div className="pt-4">
+
                       {/* LABEL */}
                       <div className="flex items-center gap-2 mb-2">
                         <span className="w-2 h-2 bg-[#E62429] border border-black" />
@@ -243,7 +256,9 @@ export default function DataDiri() {
                     {/* DECORATIVE REGISTRATION MARK */}
                     <div className="absolute bottom-3 right-4 flex items-center gap-1 opacity-30">
                       <span className="w-1.5 h-1.5 bg-black" />
+
                       <span className="w-1.5 h-1.5 border border-black" />
+
                       <span className="text-[7px] font-black tracking-wider">
                         ID
                       </span>
@@ -254,6 +269,7 @@ export default function DataDiri() {
 
               {/* Bottom note */}
               <div className="mt-5 flex items-start gap-3 bg-[#000] px-4 py-3 border-3 border-black shadow-[4px_4px_0px_#E62429]">
+
                 <div className="relative w-5 h-5 shrink-0 mt-0.5">
                   <div className="absolute inset-0 bg-[#FFD400] border-2 border-white rotate-45" />
                 </div>
@@ -271,11 +287,7 @@ export default function DataDiri() {
             SMALL COMIC LABEL
         ===================================================== */}
         <div className="flex justify-end mt-7">
-          <div className="px-4 py-2 bg-[#FFD400] border-3 border-black shadow-[4px_4px_0px_#000] rotate-[2deg]">
-            <span className="text-black text-[9px] md:text-[10px] font-black tracking-[0.15em]">
-              NEXT FILE → ABOUT ME
-            </span>
-          </div>
+
         </div>
       </div>
     </section>

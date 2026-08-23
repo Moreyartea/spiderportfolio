@@ -10,19 +10,6 @@ import Contact from "./Contact";
 
 /* =========================================================
    RENDER HALAMAN SEBELUMNYA
-   =========================================================
-
-   Halaman yang sedang ditinggalkan digunakan sebagai
-   material transisi.
-
-   ANY PAGE → IDENTITY
-   = halaman menjadi lembar komik yang dibalik.
-
-   ANY PAGE → PERSONAL
-   = halaman menjadi tirai bambu.
-
-   ANY PAGE → MISSIONS
-   = halaman diremas seperti kertas.
 ========================================================= */
 
 function renderPage(path) {
@@ -53,7 +40,7 @@ export default function PageTransition() {
 
 
   /* =========================================================
-     LANDING INTRO
+     HOME — FIRST LOAD INTRO
   ========================================================= */
 
   const [showIntro, setShowIntro] = useState(
@@ -77,6 +64,21 @@ export default function PageTransition() {
 
 
   /* =========================================================
+     RESET SCROLL
+
+     Setiap halaman baru selalu dimulai dari posisi paling atas.
+  ========================================================= */
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant",
+    });
+  }, [location.pathname]);
+
+
+  /* =========================================================
      MATIKAN INTRO KETIKA MENINGGALKAN HOME
   ========================================================= */
 
@@ -88,13 +90,16 @@ export default function PageTransition() {
 
 
   /* =========================================================
-     LANDING INTRO TIMER
+     FIRST LOAD HOME INTRO TIMER
 
-     TETAP 2300ms
+     HANYA bekerja ketika intro memang aktif.
+
+     Saat kembali ke Home melalui navigasi:
+     showIntro tetap false.
   ========================================================= */
 
   useEffect(() => {
-    if (location.pathname !== "/") {
+    if (!showIntro || location.pathname !== "/") {
       return;
     }
 
@@ -103,11 +108,11 @@ export default function PageTransition() {
     }, 2300);
 
     return () => clearTimeout(timer);
-  }, [location.pathname]);
+  }, [showIntro, location.pathname]);
 
 
   /* =========================================================
-     DETEKSI PERPINDAHAN ROUTE
+     DETEKSI ROUTE CHANGE
   ========================================================= */
 
   useEffect(() => {
@@ -124,6 +129,39 @@ export default function PageTransition() {
 
     if (previous === current) {
       return;
+    }
+
+
+    /* =======================================================
+       ANY PAGE → HOME
+
+       WEB PULL / WEB SNAP
+
+       Ini BUKAN landing intro.
+
+       Halaman sebelumnya ditarik dengan web menuju
+       pojok kanan atas, kemudian Home di belakangnya
+       menjadi terlihat.
+
+       Durasi: 1350ms
+    ======================================================= */
+
+    if (current === "/") {
+      setTransition({
+        type: "home",
+        from: previous,
+      });
+
+
+      const timer = setTimeout(() => {
+        setTransition(null);
+      }, 1350);
+
+
+      previousPath.current = current;
+
+
+      return () => clearTimeout(timer);
     }
 
 
@@ -156,7 +194,7 @@ export default function PageTransition() {
     /* =======================================================
        ANY PAGE → PERSONAL
 
-       Bamboo roll-up.
+       Bamboo curtain.
        Durasi: 1500ms
     ======================================================= */
 
@@ -206,9 +244,33 @@ export default function PageTransition() {
 
 
     /* =======================================================
-       ROUTE LAIN
+       ANY PAGE → CONTACT
 
-       Tidak diberi animasi khusus.
+       Spider Tracker.
+       Durasi: 1750ms
+    ======================================================= */
+
+    if (current === "/contact") {
+      setTransition({
+        type: "contact",
+        from: previous,
+      });
+
+
+      const timer = setTimeout(() => {
+        setTransition(null);
+      }, 1750);
+
+
+      previousPath.current = current;
+
+
+      return () => clearTimeout(timer);
+    }
+
+
+    /* =======================================================
+       ROUTE LAIN
     ======================================================= */
 
     previousPath.current = current;
@@ -232,9 +294,442 @@ export default function PageTransition() {
 
         /* =====================================================
            =====================================================
-           SPIDER-MAN LANDING INTRO
+           HOME — WEB PULL / WEB SNAP
            =====================================================
-           ===================================================== */
+        */
+
+
+        @keyframes homePagePull {
+
+          0% {
+            transform:
+              translate3d(0, 0, 0)
+              scale(1)
+              rotate(0deg);
+
+            opacity: 1;
+
+            filter:
+              brightness(1);
+          }
+
+          18% {
+
+            transform:
+              translate3d(0, 0, 0)
+              scale(0.995)
+              rotate(0deg);
+
+            opacity: 1;
+
+            filter:
+              brightness(1.03);
+          }
+
+          42% {
+
+            transform:
+              translate3d(4%, -3%, 0)
+              scale(0.97)
+              rotate(-0.7deg);
+
+            opacity: 0.98;
+
+            filter:
+              brightness(1.05);
+          }
+
+          64% {
+
+            transform:
+              translate3d(14%, -10%, 0)
+              scale(0.91)
+              rotate(-2deg);
+
+            opacity: 0.84;
+
+            filter:
+              brightness(1.08);
+          }
+
+          82% {
+
+            transform:
+              translate3d(30%, -23%, 0)
+              scale(0.78)
+              rotate(-4deg);
+
+            opacity: 0.46;
+
+            filter:
+              brightness(1.12);
+          }
+
+          94% {
+
+            transform:
+              translate3d(50%, -39%, 0)
+              scale(0.58)
+              rotate(-6deg);
+
+            opacity: 0.16;
+
+            filter:
+              brightness(1.2);
+          }
+
+          100% {
+
+            transform:
+              translate3d(72%, -58%, 0)
+              scale(0.38)
+              rotate(-9deg);
+
+            opacity: 0;
+
+            filter:
+              brightness(1.3);
+          }
+
+        }
+
+
+        @keyframes homeShadowPull {
+
+          0% {
+            transform:
+              translate3d(0, 0, 0)
+              scale(1);
+
+            opacity: 0;
+          }
+
+          25% {
+            opacity: 0.15;
+          }
+
+          55% {
+
+            transform:
+              translate3d(8%, -5%, 0)
+              scale(0.95);
+
+            opacity: 0.25;
+          }
+
+          80% {
+
+            transform:
+              translate3d(25%, -18%, 0)
+              scale(0.8);
+
+            opacity: 0.18;
+          }
+
+          100% {
+
+            transform:
+              translate3d(65%, -52%, 0)
+              scale(0.4);
+
+            opacity: 0;
+          }
+
+        }
+
+
+        @keyframes webShootHome {
+
+          0% {
+
+            transform:
+              translate3d(-10%, 15%, 0)
+              scaleX(0.05)
+              rotate(-23deg);
+
+            opacity: 0;
+          }
+
+          12% {
+
+            transform:
+              translate3d(0, 0, 0)
+              scaleX(0.25)
+              rotate(-23deg);
+
+            opacity: 1;
+          }
+
+          35% {
+
+            transform:
+              translate3d(12%, -8%, 0)
+              scaleX(0.65)
+              rotate(-23deg);
+
+            opacity: 1;
+          }
+
+          58% {
+
+            transform:
+              translate3d(28%, -20%, 0)
+              scaleX(1)
+              rotate(-23deg);
+
+            opacity: 1;
+          }
+
+          78% {
+
+            transform:
+              translate3d(45%, -34%, 0)
+              scaleX(1.08)
+              rotate(-23deg);
+
+            opacity: 0.75;
+          }
+
+          100% {
+
+            transform:
+              translate3d(67%, -52%, 0)
+              scaleX(1.15)
+              rotate(-23deg);
+
+            opacity: 0;
+          }
+
+        }
+
+
+        @keyframes webAnchorHome {
+
+          0% {
+
+            transform:
+              translate(-50%, -50%)
+              scale(0);
+
+            opacity: 0;
+          }
+
+          18% {
+
+            transform:
+              translate(-50%, -50%)
+              scale(0.8);
+
+            opacity: 1;
+          }
+
+          42% {
+
+            transform:
+              translate(-50%, -50%)
+              scale(1);
+
+            opacity: 1;
+          }
+
+          72% {
+
+            transform:
+              translate(-50%, -50%)
+              scale(1.08);
+
+            opacity: 0.8;
+          }
+
+          100% {
+
+            transform:
+              translate(-50%, -50%)
+              scale(1.35);
+
+            opacity: 0;
+          }
+
+        }
+
+
+        @keyframes webBurstHome {
+
+          0% {
+
+            transform:
+              translate(-50%, -50%)
+              scale(0)
+              rotate(0deg);
+
+            opacity: 0;
+          }
+
+          18% {
+
+            transform:
+              translate(-50%, -50%)
+              scale(0.35)
+              rotate(10deg);
+
+            opacity: 0.9;
+          }
+
+          45% {
+
+            transform:
+              translate(-50%, -50%)
+              scale(0.8)
+              rotate(25deg);
+
+            opacity: 0.75;
+          }
+
+          72% {
+
+            transform:
+              translate(-50%, -50%)
+              scale(1.3)
+              rotate(50deg);
+
+            opacity: 0.3;
+          }
+
+          100% {
+
+            transform:
+              translate(-50%, -50%)
+              scale(1.8)
+              rotate(80deg);
+
+            opacity: 0;
+          }
+
+        }
+
+
+        @keyframes webLineHome {
+
+          0% {
+
+            transform:
+              scaleX(0);
+
+            opacity: 0;
+          }
+
+          16% {
+
+            transform:
+              scaleX(1);
+
+            opacity: 0.95;
+          }
+
+          65% {
+
+            transform:
+              scaleX(1);
+
+            opacity: 0.65;
+          }
+
+          100% {
+
+            transform:
+              scaleX(0.3);
+
+            opacity: 0;
+          }
+
+        }
+
+
+        @keyframes homeFlash {
+
+          0% {
+            opacity: 0;
+          }
+
+          70% {
+            opacity: 0;
+          }
+
+          78% {
+            opacity: 0.75;
+          }
+
+          88% {
+            opacity: 0;
+          }
+
+          100% {
+            opacity: 0;
+          }
+
+        }
+
+
+        @keyframes homeWebTexture {
+
+          0% {
+
+            transform:
+              translate(-50%, -50%)
+              scale(0.3)
+              rotate(0deg);
+
+            opacity: 0;
+          }
+
+          20% {
+
+            transform:
+              translate(-50%, -50%)
+              scale(0.55)
+              rotate(-4deg);
+
+            opacity: 0.2;
+          }
+
+          55% {
+
+            transform:
+              translate(-50%, -50%)
+              scale(1)
+              rotate(-10deg);
+
+            opacity: 0.35;
+          }
+
+          80% {
+
+            transform:
+              translate(-50%, -50%)
+              scale(1.25)
+              rotate(-15deg);
+
+            opacity: 0.22;
+          }
+
+          100% {
+
+            transform:
+              translate(-50%, -50%)
+              scale(1.5)
+              rotate(-20deg);
+
+            opacity: 0;
+          }
+
+        }
+
+
+        /* =====================================================
+           =====================================================
+           LANDING INTRO
+           =====================================================
+        */
 
 
         @keyframes introBg {
@@ -398,8 +893,7 @@ export default function PageTransition() {
 
         /* =====================================================
            =====================================================
-           IDENTITY
-           COMIC PAGE TURN
+           IDENTITY — COMIC PAGE TURN
            =====================================================
         */
 
@@ -736,8 +1230,7 @@ export default function PageTransition() {
 
         /* =====================================================
            =====================================================
-           PERSONAL
-           BAMBOO ROLL-UP
+           PERSONAL — BAMBOO CURTAIN
            =====================================================
         */
 
@@ -745,7 +1238,6 @@ export default function PageTransition() {
         @keyframes bambooRoll {
 
           0% {
-
             clip-path:
               inset(0 0 0 0);
 
@@ -755,9 +1247,7 @@ export default function PageTransition() {
             opacity: 1;
           }
 
-
           15% {
-
             clip-path:
               inset(0 0 8% 0);
 
@@ -767,9 +1257,7 @@ export default function PageTransition() {
             opacity: 1;
           }
 
-
           30% {
-
             clip-path:
               inset(0 0 22% 0);
 
@@ -779,9 +1267,7 @@ export default function PageTransition() {
             opacity: 1;
           }
 
-
           48% {
-
             clip-path:
               inset(0 0 43% 0);
 
@@ -791,9 +1277,7 @@ export default function PageTransition() {
             opacity: 1;
           }
 
-
           65% {
-
             clip-path:
               inset(0 0 64% 0);
 
@@ -803,9 +1287,7 @@ export default function PageTransition() {
             opacity: 0.98;
           }
 
-
           80% {
-
             clip-path:
               inset(0 0 81% 0);
 
@@ -815,9 +1297,7 @@ export default function PageTransition() {
             opacity: 0.9;
           }
 
-
           92% {
-
             clip-path:
               inset(0 0 93% 0);
 
@@ -827,9 +1307,7 @@ export default function PageTransition() {
             opacity: 0.65;
           }
 
-
           100% {
-
             clip-path:
               inset(0 0 100% 0);
 
@@ -845,7 +1323,6 @@ export default function PageTransition() {
         @keyframes bambooRoller {
 
           0% {
-
             transform:
               translateY(0)
               scaleX(1);
@@ -853,9 +1330,7 @@ export default function PageTransition() {
             opacity: 1;
           }
 
-
           20% {
-
             transform:
               translateY(-3%)
               scaleX(1.005);
@@ -863,9 +1338,7 @@ export default function PageTransition() {
             opacity: 1;
           }
 
-
           45% {
-
             transform:
               translateY(-11%)
               scaleX(1.01);
@@ -873,9 +1346,7 @@ export default function PageTransition() {
             opacity: 1;
           }
 
-
           70% {
-
             transform:
               translateY(-21%)
               scaleX(1.015);
@@ -883,9 +1354,7 @@ export default function PageTransition() {
             opacity: 1;
           }
 
-
           88% {
-
             transform:
               translateY(-30%)
               scaleX(1.02);
@@ -893,9 +1362,7 @@ export default function PageTransition() {
             opacity: 1;
           }
 
-
           100% {
-
             transform:
               translateY(-38%)
               scaleX(1.025);
@@ -909,7 +1376,6 @@ export default function PageTransition() {
         @keyframes bambooEdge {
 
           0% {
-
             transform:
               translateY(0)
               scaleX(1);
@@ -917,9 +1383,7 @@ export default function PageTransition() {
             opacity: 1;
           }
 
-
           25% {
-
             transform:
               translateY(-7%)
               scaleX(1.01);
@@ -927,9 +1391,7 @@ export default function PageTransition() {
             opacity: 1;
           }
 
-
           50% {
-
             transform:
               translateY(-18%)
               scaleX(1.015);
@@ -937,9 +1399,7 @@ export default function PageTransition() {
             opacity: 1;
           }
 
-
           75% {
-
             transform:
               translateY(-32%)
               scaleX(1.02);
@@ -947,9 +1407,7 @@ export default function PageTransition() {
             opacity: 0.85;
           }
 
-
           100% {
-
             transform:
               translateY(-48%)
               scaleX(1.03);
@@ -963,7 +1421,6 @@ export default function PageTransition() {
         @keyframes bambooShadow {
 
           0% {
-
             opacity: 0.2;
 
             transform:
@@ -971,14 +1428,11 @@ export default function PageTransition() {
               scaleY(1);
           }
 
-
           30% {
             opacity: 0.24;
           }
 
-
           60% {
-
             opacity: 0.15;
 
             transform:
@@ -986,9 +1440,7 @@ export default function PageTransition() {
               scaleY(0.85);
           }
 
-
           100% {
-
             opacity: 0;
 
             transform:
@@ -1002,25 +1454,20 @@ export default function PageTransition() {
         @keyframes bambooLight {
 
           0% {
-
             transform:
               translateY(0);
 
             opacity: 0.1;
           }
 
-
           50% {
-
             transform:
               translateY(-17%);
 
             opacity: 0.16;
           }
 
-
           100% {
-
             transform:
               translateY(-40%);
 
@@ -1032,20 +1479,8 @@ export default function PageTransition() {
 
         /* =====================================================
            =====================================================
-           MISSIONS
-           CRUMPLED PAPER
+           MISSIONS — CRUMPLED PAPER
            =====================================================
-           =====================================================
-
-           Konsep:
-
-           Halaman sebelumnya menjadi selembar kertas.
-
-           Kertas mulai berkerut dari berbagai arah,
-           tertarik menuju pusat, berputar sedikit,
-           kemudian diremas menjadi gumpalan kecil.
-
-           Missions asli berada di belakangnya.
         */
 
 
@@ -1076,7 +1511,6 @@ export default function PageTransition() {
               1;
           }
 
-
           15% {
 
             transform:
@@ -1101,7 +1535,6 @@ export default function PageTransition() {
             opacity:
               1;
           }
-
 
           30% {
 
@@ -1129,7 +1562,6 @@ export default function PageTransition() {
               0.98;
           }
 
-
           45% {
 
             transform:
@@ -1155,7 +1587,6 @@ export default function PageTransition() {
             opacity:
               0.96;
           }
-
 
           60% {
 
@@ -1183,7 +1614,6 @@ export default function PageTransition() {
               0.9;
           }
 
-
           75% {
 
             transform:
@@ -1209,7 +1639,6 @@ export default function PageTransition() {
             opacity:
               0.75;
           }
-
 
           88% {
 
@@ -1237,7 +1666,6 @@ export default function PageTransition() {
               0.4;
           }
 
-
           100% {
 
             transform:
@@ -1261,17 +1689,9 @@ export default function PageTransition() {
         }
 
 
-        /* =====================================================
-           CRUMPLE — SHADOW
-           
-           Shadow semakin kecil dan semakin pekat ketika
-           kertas berubah menjadi gumpalan.
-        ===================================================== */
-
         @keyframes crumpleShadow {
 
           0% {
-
             transform:
               translate3d(0, 0, 0)
               scale(1);
@@ -1283,9 +1703,7 @@ export default function PageTransition() {
               blur(0px);
           }
 
-
           25% {
-
             transform:
               translate3d(1%, 2%, 0)
               scale(0.9);
@@ -1297,9 +1715,7 @@ export default function PageTransition() {
               blur(3px);
           }
 
-
           50% {
-
             transform:
               translate3d(-1%, 1%, 0)
               scale(0.68);
@@ -1311,9 +1727,7 @@ export default function PageTransition() {
               blur(6px);
           }
 
-
           75% {
-
             transform:
               translate3d(1%, 0, 0)
               scale(0.43);
@@ -1325,9 +1739,7 @@ export default function PageTransition() {
               blur(10px);
           }
 
-
           100% {
-
             transform:
               translate3d(0, 0, 0)
               scale(0.08);
@@ -1342,16 +1754,9 @@ export default function PageTransition() {
         }
 
 
-        /* =====================================================
-           CRUMPLE — CREASES
-           
-           Garis-garis lipatan bergerak menuju pusat.
-        ===================================================== */
-
         @keyframes creaseHorizontal {
 
           0% {
-
             transform:
               translateX(0)
               scaleX(1)
@@ -1361,15 +1766,12 @@ export default function PageTransition() {
               0;
           }
 
-
           20% {
             opacity:
               0.15;
           }
 
-
           45% {
-
             transform:
               translateX(-4%)
               scaleX(0.82)
@@ -1379,9 +1781,7 @@ export default function PageTransition() {
               0.25;
           }
 
-
           70% {
-
             transform:
               translateX(7%)
               scaleX(0.45)
@@ -1391,9 +1791,7 @@ export default function PageTransition() {
               0.3;
           }
 
-
           100% {
-
             transform:
               translateX(0)
               scaleX(0.08)
@@ -1409,7 +1807,6 @@ export default function PageTransition() {
         @keyframes creaseVertical {
 
           0% {
-
             transform:
               translateY(0)
               scaleY(1)
@@ -1419,15 +1816,12 @@ export default function PageTransition() {
               0;
           }
 
-
           20% {
             opacity:
               0.15;
           }
 
-
           45% {
-
             transform:
               translateY(4%)
               scaleY(0.8)
@@ -1437,9 +1831,7 @@ export default function PageTransition() {
               0.25;
           }
 
-
           70% {
-
             transform:
               translateY(-7%)
               scaleY(0.42)
@@ -1449,9 +1841,7 @@ export default function PageTransition() {
               0.3;
           }
 
-
           100% {
-
             transform:
               translateY(0)
               scaleY(0.08)
@@ -1464,14 +1854,9 @@ export default function PageTransition() {
         }
 
 
-        /* =====================================================
-           CRUMPLE — PAPER LIGHT
-        ===================================================== */
-
         @keyframes crumpleLight {
 
           0% {
-
             transform:
               translate(-50%, -50%)
               scale(1)
@@ -1481,15 +1866,12 @@ export default function PageTransition() {
               0;
           }
 
-
           25% {
             opacity:
               0.08;
           }
 
-
           50% {
-
             transform:
               translate(-50%, -50%)
               scale(0.72)
@@ -1499,9 +1881,7 @@ export default function PageTransition() {
               0.14;
           }
 
-
           75% {
-
             transform:
               translate(-50%, -50%)
               scale(0.4)
@@ -1511,9 +1891,7 @@ export default function PageTransition() {
               0.12;
           }
 
-
           100% {
-
             transform:
               translate(-50%, -50%)
               scale(0.08)
@@ -1526,14 +1904,9 @@ export default function PageTransition() {
         }
 
 
-        /* =====================================================
-           CRUMPLE — CENTRAL WRINKLE
-        ===================================================== */
-
         @keyframes crumpleWrinkle {
 
           0% {
-
             transform:
               translate(-50%, -50%)
               scale(0)
@@ -1543,9 +1916,7 @@ export default function PageTransition() {
               0;
           }
 
-
           30% {
-
             transform:
               translate(-50%, -50%)
               scale(0.35)
@@ -1555,9 +1926,7 @@ export default function PageTransition() {
               0.12;
           }
 
-
           55% {
-
             transform:
               translate(-50%, -50%)
               scale(0.7)
@@ -1567,9 +1936,7 @@ export default function PageTransition() {
               0.2;
           }
 
-
           78% {
-
             transform:
               translate(-50%, -50%)
               scale(1)
@@ -1579,9 +1946,7 @@ export default function PageTransition() {
               0.25;
           }
 
-
           100% {
-
             transform:
               translate(-50%, -50%)
               scale(1.2)
@@ -1595,10 +1960,469 @@ export default function PageTransition() {
 
 
         /* =====================================================
+           =====================================================
+           CONTACT — SPIDY TRACKER
+           =====================================================
+        */
+
+
+        @keyframes trackerBackdrop {
+
+          0% {
+            opacity: 0;
+          }
+
+          12% {
+            opacity: 0.96;
+          }
+
+          78% {
+            opacity: 0.96;
+          }
+
+          100% {
+            opacity: 0;
+          }
+
+        }
+
+
+        @keyframes trackerInterface {
+
+          0% {
+            opacity: 0;
+            transform:
+              scale(0.82);
+          }
+
+          12% {
+            opacity: 1;
+            transform:
+              scale(0.92);
+          }
+
+          35% {
+            transform:
+              scale(1);
+          }
+
+          76% {
+            opacity: 1;
+            transform:
+              scale(1);
+          }
+
+          100% {
+            opacity: 0;
+            transform:
+              scale(1.06);
+          }
+
+        }
+
+
+        @keyframes trackerRing {
+
+          0% {
+            opacity: 0;
+            transform:
+              translate(-50%, -50%)
+              scale(0.15)
+              rotate(0deg);
+          }
+
+          18% {
+            opacity: 1;
+            transform:
+              translate(-50%, -50%)
+              scale(0.7)
+              rotate(25deg);
+          }
+
+          45% {
+            opacity: 0.95;
+            transform:
+              translate(-50%, -50%)
+              scale(1)
+              rotate(90deg);
+          }
+
+          70% {
+            opacity: 1;
+            transform:
+              translate(-50%, -50%)
+              scale(1.05)
+              rotate(180deg);
+          }
+
+          100% {
+            opacity: 0;
+            transform:
+              translate(-50%, -50%)
+              scale(1.18)
+              rotate(270deg);
+          }
+
+        }
+
+
+        @keyframes trackerInnerRing {
+
+          0% {
+            opacity: 0;
+            transform:
+              translate(-50%, -50%)
+              scale(0.25)
+              rotate(0deg);
+          }
+
+          20% {
+            opacity: 1;
+          }
+
+          55% {
+            transform:
+              translate(-50%, -50%)
+              scale(1)
+              rotate(-120deg);
+          }
+
+          82% {
+            opacity: 1;
+            transform:
+              translate(-50%, -50%)
+              scale(1.03)
+              rotate(-240deg);
+          }
+
+          100% {
+            opacity: 0;
+            transform:
+              translate(-50%, -50%)
+              scale(1.12)
+              rotate(-360deg);
+          }
+
+        }
+
+
+        @keyframes trackerCrosshair {
+
+          0% {
+            opacity: 0;
+            transform:
+              translate(-50%, -50%)
+              scale(0.2);
+          }
+
+          22% {
+            opacity: 1;
+            transform:
+              translate(-50%, -50%)
+              scale(1);
+          }
+
+          72% {
+            opacity: 1;
+            transform:
+              translate(-50%, -50%)
+              scale(1);
+          }
+
+          100% {
+            opacity: 0;
+            transform:
+              translate(-50%, -50%)
+              scale(1.25);
+          }
+
+        }
+
+
+        @keyframes trackerPulse {
+
+          0% {
+            opacity: 0;
+            transform:
+              translate(-50%, -50%)
+              scale(0.4);
+          }
+
+          35% {
+            opacity: 0.8;
+            transform:
+              translate(-50%, -50%)
+              scale(1);
+          }
+
+          52% {
+            opacity: 0.2;
+            transform:
+              translate(-50%, -50%)
+              scale(1.3);
+          }
+
+          68% {
+            opacity: 0.8;
+            transform:
+              translate(-50%, -50%)
+              scale(1);
+          }
+
+          100% {
+            opacity: 0;
+            transform:
+              translate(-50%, -50%)
+              scale(1.45);
+          }
+
+        }
+
+
+        @keyframes trackerScan {
+
+          0% {
+            transform:
+              translateY(-46vh);
+            opacity: 0;
+          }
+
+          8% {
+            opacity: 1;
+          }
+
+          48% {
+            opacity: 1;
+          }
+
+          58% {
+            opacity: 0.9;
+          }
+
+          92% {
+            opacity: 1;
+          }
+
+          100% {
+            transform:
+              translateY(46vh);
+            opacity: 0;
+          }
+
+        }
+
+
+        @keyframes trackerScanGlow {
+
+          0% {
+            opacity: 0;
+          }
+
+          15% {
+            opacity: 0.8;
+          }
+
+          50% {
+            opacity: 1;
+          }
+
+          85% {
+            opacity: 0.8;
+          }
+
+          100% {
+            opacity: 0;
+          }
+
+        }
+
+
+        @keyframes trackerText {
+
+          0% {
+            opacity: 0;
+            transform:
+              translateY(8px);
+          }
+
+          15% {
+            opacity: 1;
+            transform:
+              translateY(0);
+          }
+
+          65% {
+            opacity: 1;
+            transform:
+              translateY(0);
+          }
+
+          100% {
+            opacity: 0;
+            transform:
+              translateY(-6px);
+          }
+
+        }
+
+
+        @keyframes trackerStatus {
+
+          0%,
+          52% {
+            opacity: 1;
+          }
+
+          53%,
+          100% {
+            opacity: 0;
+          }
+
+        }
+
+
+        @keyframes trackerAcquired {
+
+          0%,
+          53% {
+            opacity: 0;
+            transform:
+              translateY(8px);
+          }
+
+          65% {
+            opacity: 1;
+            transform:
+              translateY(0);
+          }
+
+          82% {
+            opacity: 1;
+            transform:
+              translateY(0);
+          }
+
+          100% {
+            opacity: 0;
+            transform:
+              translateY(-8px);
+          }
+
+        }
+
+
+        @keyframes trackerCorner {
+
+          0%,
+          12% {
+            opacity: 0;
+          }
+
+          20%,
+          78% {
+            opacity: 0.85;
+          }
+
+          100% {
+            opacity: 0;
+          }
+
+        }
+
+
+        @keyframes trackerDots {
+
+          0% {
+            opacity: 0;
+            transform:
+              scale(0.4);
+          }
+
+          20% {
+            opacity: 1;
+            transform:
+              scale(1);
+          }
+
+          70% {
+            opacity: 1;
+          }
+
+          100% {
+            opacity: 0;
+            transform:
+              scale(1.2);
+          }
+
+        }
+
+
+        @keyframes trackerFlash {
+
+          0% {
+            opacity: 0;
+          }
+
+          68% {
+            opacity: 0;
+          }
+
+          74% {
+            opacity: 0.8;
+          }
+
+          82% {
+            opacity: 0;
+          }
+
+          100% {
+            opacity: 0;
+          }
+
+        }
+
+
+        @keyframes trackerGrid {
+
+          0% {
+            opacity: 0;
+            transform:
+              scale(1.08);
+          }
+
+          18% {
+            opacity: 0.18;
+            transform:
+              scale(1);
+          }
+
+          75% {
+            opacity: 0.18;
+          }
+
+          100% {
+            opacity: 0;
+            transform:
+              scale(0.98);
+          }
+
+        }
+
+
+        /* =====================================================
            ACCESSIBILITY
         ===================================================== */
 
         @media (prefers-reduced-motion: reduce) {
+
+          .home-page,
+          .home-shadow,
+          .home-web,
+          .home-anchor,
+          .home-burst,
+          .home-line,
+          .home-flash,
+          .home-web-texture,
 
           .identity-paper,
           .identity-fold,
@@ -1617,7 +2441,23 @@ export default function PageTransition() {
           .missions-crease-horizontal,
           .missions-crease-vertical,
           .missions-light,
-          .missions-wrinkle {
+          .missions-wrinkle,
+
+          .tracker-backdrop,
+          .tracker-interface,
+          .tracker-ring,
+          .tracker-inner-ring,
+          .tracker-crosshair,
+          .tracker-pulse,
+          .tracker-scan,
+          .tracker-scan-glow,
+          .tracker-text,
+          .tracker-status,
+          .tracker-acquired,
+          .tracker-corner,
+          .tracker-dots,
+          .tracker-flash,
+          .tracker-grid {
             animation-duration:
               1ms !important;
           }
@@ -1630,9 +2470,9 @@ export default function PageTransition() {
 
       {/* =========================================================
           =========================================================
-          SPIDER-MAN LANDING INTRO
+          FIRST LOAD HOME — SPIDER-MAN INTRO
           =========================================================
-          ========================================================= */}
+      ========================================================= */}
 
       {showIntro && location.pathname === "/" && (
         <div
@@ -1646,8 +2486,6 @@ export default function PageTransition() {
           aria-hidden="true"
         >
 
-          {/* BACKGROUND */}
-
           <div
             className="absolute inset-0"
             style={{
@@ -1659,8 +2497,6 @@ export default function PageTransition() {
             }}
           />
 
-
-          {/* SPIDER-MAN */}
 
           <img
             src="/assets/intro/spiderman-webshot.png"
@@ -1684,8 +2520,6 @@ export default function PageTransition() {
             }}
           />
 
-
-          {/* WEB SHOT */}
 
           <div
             className="
@@ -1717,8 +2551,6 @@ export default function PageTransition() {
             }}
           />
 
-
-          {/* SPIDER WEB */}
 
           <img
             src="/assets/intro/spider-web.svg"
@@ -1762,10 +2594,359 @@ export default function PageTransition() {
 
       {/* =========================================================
           =========================================================
-          ANY PAGE → IDENTITY
-          COMIC PAGE TURN
+          ANY PAGE → HOME
+          WEB PULL / WEB SNAP
           =========================================================
-          ========================================================= */}
+      ========================================================= */}
+
+      {transition?.type === "home" && (
+        <div
+          className="
+            fixed
+            inset-0
+            z-[120]
+            pointer-events-none
+            overflow-hidden
+          "
+          aria-hidden="true"
+        >
+
+          {/* =====================================================
+              PREVIOUS PAGE SHADOW
+          ===================================================== */}
+
+          <div
+            className="
+              home-shadow
+              absolute
+              inset-0
+              bg-black
+              pointer-events-none
+            "
+            style={{
+              animation:
+                "homeShadowPull 1350ms cubic-bezier(.16,1,.3,1) both",
+
+              willChange:
+                "transform, opacity",
+            }}
+          />
+
+
+          {/* =====================================================
+              PREVIOUS PAGE
+
+              Halaman yang sedang ditinggalkan ditarik
+              menggunakan efek web menuju kanan atas.
+          ===================================================== */}
+
+          <div
+            className="
+              home-page
+              absolute
+              inset-0
+              overflow-hidden
+              bg-black
+            "
+            style={{
+              transformOrigin:
+                "72% 58%",
+
+              animation:
+                "homePagePull 1350ms cubic-bezier(.16,1,.3,1) both",
+
+              willChange:
+                "transform, opacity, filter",
+            }}
+          >
+
+            <div className="absolute inset-0">
+              {renderPage(transition.from)}
+            </div>
+
+
+            {/* COMIC DOT TEXTURE */}
+
+            <div
+              className="
+                absolute
+                inset-0
+                pointer-events-none
+              "
+              style={{
+                backgroundImage:
+                  "radial-gradient(rgba(0,0,0,.08) 0.7px, transparent 0.7px)",
+
+                backgroundSize:
+                  "8px 8px",
+
+                opacity:
+                  0.08,
+              }}
+            />
+
+          </div>
+
+
+          {/* =====================================================
+              WEB TEXTURE
+
+              Menggunakan asset web yang sama dengan
+              identitas Spider-Man website.
+          ===================================================== */}
+
+          <img
+            src="/assets/intro/spider-web.svg"
+            alt=""
+            className="
+              home-web-texture
+              absolute
+
+              left-1/2
+              top-1/2
+
+              w-[85vw]
+              h-[85vw]
+
+              min-w-[600px]
+              min-h-[600px]
+
+              max-w-[1200px]
+              max-h-[1200px]
+
+              object-contain
+
+              pointer-events-none
+            "
+            style={{
+              zIndex:
+                15,
+
+              filter:
+                "brightness(0) saturate(100%)",
+
+              transform:
+                "translate(-50%, -50%)",
+
+              transformOrigin:
+                "72% 58%",
+
+              animation:
+                "homeWebTexture 1350ms cubic-bezier(.16,1,.3,1) both",
+            }}
+          />
+
+
+          {/* =====================================================
+              WEB LINE
+
+              Garis utama yang terasa seperti tali web
+              sedang menarik halaman.
+          ===================================================== */}
+
+          <div
+            className="
+              home-web
+              absolute
+
+              left-[-10%]
+              bottom-[26%]
+
+              w-[125%]
+              h-[4px]
+
+              bg-black
+
+              origin-left
+
+              pointer-events-none
+            "
+            style={{
+              zIndex:
+                25,
+
+              transform:
+                "rotate(-23deg)",
+
+              boxShadow:
+                "0 0 8px rgba(0,0,0,.45)",
+
+              animation:
+                "webShootHome 1150ms cubic-bezier(.16,1,.3,1) both",
+            }}
+          />
+
+
+          {/* =====================================================
+              SECOND WEB LINE
+          ===================================================== */}
+
+          <div
+            className="
+              home-line
+              absolute
+
+              left-[10%]
+              bottom-[34%]
+
+              w-[72%]
+              h-[2px]
+
+              bg-black/80
+
+              origin-left
+
+              pointer-events-none
+            "
+            style={{
+              zIndex:
+                24,
+
+              transform:
+                "rotate(-23deg)",
+
+              animation:
+                "webLineHome 1050ms cubic-bezier(.16,1,.3,1) 80ms both",
+            }}
+          />
+
+
+          {/* =====================================================
+              WEB ANCHOR
+          ===================================================== */}
+
+          <div
+            className="
+              home-anchor
+              absolute
+
+              left-[73%]
+              top-[40%]
+
+              w-12
+              h-12
+
+              rounded-full
+
+              border-2
+              border-black
+
+              pointer-events-none
+            "
+            style={{
+              zIndex:
+                30,
+
+              transform:
+                "translate(-50%, -50%)",
+
+              boxShadow:
+                "0 0 14px rgba(0,0,0,.55)",
+
+              animation:
+                "webAnchorHome 1000ms cubic-bezier(.16,1,.3,1) both",
+            }}
+          />
+
+
+          {/* =====================================================
+              WEB BURST
+          ===================================================== */}
+
+          <div
+            className="
+              home-burst
+              absolute
+
+              left-[73%]
+              top-[40%]
+
+              w-[190px]
+              h-[190px]
+
+              rounded-full
+
+              border
+              border-white/70
+
+              pointer-events-none
+            "
+            style={{
+              zIndex:
+                28,
+
+              transform:
+                "translate(-50%, -50%)",
+
+              animation:
+                "webBurstHome 1150ms cubic-bezier(.16,1,.3,1) 90ms both",
+            }}
+          />
+
+
+          {/* =====================================================
+              WEB ANCHOR CENTER
+          ===================================================== */}
+
+          <div
+            className="
+              absolute
+
+              left-[73%]
+              top-[40%]
+
+              w-3
+              h-3
+
+              rounded-full
+
+              bg-black
+
+              pointer-events-none
+            "
+            style={{
+              zIndex:
+                32,
+
+              boxShadow:
+                "0 0 14px 4px rgba(0,0,0,.55)",
+
+              animation:
+                "webAnchorHome 900ms cubic-bezier(.16,1,.3,1) 40ms both",
+            }}
+          />
+
+
+          {/* =====================================================
+              FINAL SNAP FLASH
+          ===================================================== */}
+
+          <div
+            className="
+              home-flash
+              absolute
+              inset-0
+              bg-white
+              pointer-events-none
+            "
+            style={{
+              zIndex:
+                40,
+
+              animation:
+                "homeFlash 1350ms ease both",
+            }}
+          />
+
+        </div>
+      )}
+
+
+      {/* =========================================================
+          =========================================================
+          ANY PAGE → IDENTITY
+          =========================================================
+      ========================================================= */}
 
       {transition?.type === "identity" && (
         <div
@@ -1778,8 +2959,6 @@ export default function PageTransition() {
           "
           aria-hidden="true"
         >
-
-          {/* SHADOW */}
 
           <div
             className="
@@ -1795,8 +2974,6 @@ export default function PageTransition() {
             }}
           />
 
-
-          {/* OUTGOING PAGE */}
 
           <div
             className="
@@ -1822,8 +2999,6 @@ export default function PageTransition() {
             </div>
 
 
-            {/* SUBTLE PAPER TEXTURE */}
-
             <div
               className="
                 absolute
@@ -1842,8 +3017,6 @@ export default function PageTransition() {
               }}
             />
 
-
-            {/* LIGHT PASS */}
 
             <div
               className="
@@ -1868,8 +3041,6 @@ export default function PageTransition() {
           </div>
 
 
-          {/* FOLDED BACK SIDE */}
-
           <div
             className="
               identity-fold
@@ -1893,8 +3064,6 @@ export default function PageTransition() {
           />
 
 
-          {/* RED SPEED LINE */}
-
           <div
             className="
               identity-line
@@ -1912,8 +3081,6 @@ export default function PageTransition() {
             }}
           />
 
-
-          {/* YELLOW SPEED LINE */}
 
           <div
             className="
@@ -1939,9 +3106,8 @@ export default function PageTransition() {
       {/* =========================================================
           =========================================================
           ANY PAGE → PERSONAL
-          BAMBOO ROLL-UP
           =========================================================
-          ========================================================= */}
+      ========================================================= */}
 
       {transition?.type === "personal" && (
         <div
@@ -1954,8 +3120,6 @@ export default function PageTransition() {
           "
           aria-hidden="true"
         >
-
-          {/* SHADOW */}
 
           <div
             className="
@@ -1971,8 +3135,6 @@ export default function PageTransition() {
             }}
           />
 
-
-          {/* BAMBOO CURTAIN */}
 
           <div
             className="
@@ -1990,14 +3152,10 @@ export default function PageTransition() {
             }}
           >
 
-            {/* HALAMAN SEBELUMNYA */}
-
             <div className="absolute inset-0">
               {renderPage(transition.from)}
             </div>
 
-
-            {/* BAMBOO COLOR / TEXTURE */}
 
             <div
               className="
@@ -2018,8 +3176,6 @@ export default function PageTransition() {
             />
 
 
-            {/* BAMBOO HORIZONTAL SLATS */}
-
             <div
               className="
                 absolute
@@ -2036,8 +3192,6 @@ export default function PageTransition() {
             />
 
 
-            {/* VERTICAL ROPE LEFT */}
-
             <div
               className="
                 absolute
@@ -2050,8 +3204,6 @@ export default function PageTransition() {
               "
             />
 
-
-            {/* VERTICAL ROPE CENTER */}
 
             <div
               className="
@@ -2066,8 +3218,6 @@ export default function PageTransition() {
             />
 
 
-            {/* VERTICAL ROPE RIGHT */}
-
             <div
               className="
                 absolute
@@ -2080,8 +3230,6 @@ export default function PageTransition() {
               "
             />
 
-
-            {/* SOFT LIGHT */}
 
             <div
               className="
@@ -2103,8 +3251,6 @@ export default function PageTransition() {
 
           </div>
 
-
-          {/* BAMBOO ROLLER */}
 
           <div
             className="
@@ -2138,8 +3284,6 @@ export default function PageTransition() {
           />
 
 
-          {/* ROLLER HIGHLIGHT */}
-
           <div
             className="
               absolute
@@ -2160,8 +3304,6 @@ export default function PageTransition() {
             }}
           />
 
-
-          {/* BOTTOM BAMBOO EDGE */}
 
           <div
             className="
@@ -2201,9 +3343,8 @@ export default function PageTransition() {
       {/* =========================================================
           =========================================================
           ANY PAGE → MISSIONS
-          CRUMPLED PAPER
           =========================================================
-          ========================================================= */}
+      ========================================================= */}
 
       {transition?.type === "missions" && (
         <div
@@ -2216,10 +3357,6 @@ export default function PageTransition() {
           "
           aria-hidden="true"
         >
-
-          {/* =====================================================
-              SHADOW
-          ===================================================== */}
 
           <div
             className="
@@ -2238,12 +3375,6 @@ export default function PageTransition() {
             }}
           />
 
-
-          {/* =====================================================
-              OUTGOING PAGE
-
-              Halaman sebelumnya menjadi kertas yang diremas.
-          ===================================================== */}
 
           <div
             className="
@@ -2264,18 +3395,10 @@ export default function PageTransition() {
             }}
           >
 
-            {/* =================================================
-                HALAMAN ASLI
-            ================================================= */}
-
             <div className="absolute inset-0">
               {renderPage(transition.from)}
             </div>
 
-
-            {/* =================================================
-                PAPER TEXTURE
-            ================================================= */}
 
             <div
               className="
@@ -2295,13 +3418,6 @@ export default function PageTransition() {
               }}
             />
 
-
-            {/* =================================================
-                CENTRAL LIGHT
-
-                Membantu memberi kesan permukaan kertas
-                yang saling bertumpuk saat diremas.
-            ================================================= */}
 
             <div
               className="
@@ -2328,10 +3444,6 @@ export default function PageTransition() {
               }}
             />
 
-
-            {/* =================================================
-                HORIZONTAL CREASES
-            ================================================= */}
 
             <div
               className="
@@ -2376,10 +3488,6 @@ export default function PageTransition() {
             />
 
 
-            {/* =================================================
-                VERTICAL CREASES
-            ================================================= */}
-
             <div
               className="
                 missions-crease-vertical
@@ -2420,10 +3528,6 @@ export default function PageTransition() {
             />
 
 
-            {/* =================================================
-                CENTRAL WRINKLE
-            ================================================= */}
-
             <div
               className="
                 missions-wrinkle
@@ -2453,6 +3557,485 @@ export default function PageTransition() {
             />
 
           </div>
+
+        </div>
+      )}
+
+
+      {/* =========================================================
+          =========================================================
+          ANY PAGE → CONTACT
+          SPIDY TRACKER
+          =========================================================
+      ========================================================= */}
+
+      {transition?.type === "contact" && (
+        <div
+          className="
+            fixed
+            inset-0
+            z-[140]
+            pointer-events-none
+            overflow-hidden
+            bg-[#05070B]
+          "
+          aria-hidden="true"
+        >
+
+          <div
+            className="
+              tracker-backdrop
+              absolute
+              inset-0
+              bg-[#05070B]
+            "
+            style={{
+              animation:
+                "trackerBackdrop 1750ms cubic-bezier(.22,.8,.25,1) both",
+            }}
+          />
+
+
+          <div
+            className="
+              tracker-grid
+              absolute
+              inset-0
+              opacity-0
+            "
+            style={{
+              backgroundImage:
+                `
+                  linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
+                  linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px)
+                `,
+
+              backgroundSize:
+                "48px 48px",
+
+              animation:
+                "trackerGrid 1750ms ease-out both",
+            }}
+          />
+
+
+          <div
+            className="
+              tracker-interface
+              absolute
+              top-7
+              left-7
+              right-7
+              flex
+              items-center
+              justify-between
+              font-mono
+            "
+            style={{
+              animation:
+                "trackerInterface 1750ms cubic-bezier(.22,.8,.25,1) both",
+            }}
+          >
+
+            <div className="flex items-center gap-3">
+
+              <span className="w-2 h-2 bg-[#E62429] rounded-full animate-pulse" />
+
+              <span className="text-white/70 text-[10px] md:text-xs tracking-[0.25em] font-bold">
+                SPIDERTIH // SIGNAL TRACKER
+              </span>
+
+            </div>
+
+
+            <span className="text-[#FFD400] text-[9px] md:text-xs tracking-widest">
+              SYS. ONLINE
+            </span>
+
+          </div>
+
+
+          <div
+            className="
+              tracker-corner
+              absolute
+              left-8
+              top-24
+              w-12
+              h-12
+              border-l-2
+              border-t-2
+              border-[#FFD400]
+            "
+            style={{
+              animation:
+                "trackerCorner 1750ms ease both",
+            }}
+          />
+
+
+          <div
+            className="
+              tracker-corner
+              absolute
+              right-8
+              top-24
+              w-12
+              h-12
+              border-r-2
+              border-t-2
+              border-[#FFD400]
+            "
+            style={{
+              animation:
+                "trackerCorner 1750ms ease 60ms both",
+            }}
+          />
+
+
+          <div
+            className="
+              tracker-corner
+              absolute
+              left-8
+              bottom-24
+              w-12
+              h-12
+              border-l-2
+              border-b-2
+              border-[#FFD400]
+            "
+            style={{
+              animation:
+                "trackerCorner 1750ms ease 100ms both",
+            }}
+          />
+
+
+          <div
+            className="
+              tracker-corner
+              absolute
+              right-8
+              bottom-24
+              w-12
+              h-12
+              border-r-2
+              border-b-2
+              border-[#FFD400]
+            "
+            style={{
+              animation:
+                "trackerCorner 1750ms ease 140ms both",
+            }}
+          />
+
+
+          <div
+            className="
+              tracker-interface
+              absolute
+              left-1/2
+              top-1/2
+              w-[280px]
+              h-[280px]
+              md:w-[360px]
+              md:h-[360px]
+            "
+            style={{
+              transform:
+                "translate(-50%, -50%)",
+
+              animation:
+                "trackerInterface 1750ms cubic-bezier(.22,.8,.25,1) both",
+            }}
+          >
+
+            <div
+              className="
+                tracker-ring
+                absolute
+                left-1/2
+                top-1/2
+                w-full
+                h-full
+                rounded-full
+                border-2
+                border-[#E62429]/80
+              "
+              style={{
+                transform:
+                  "translate(-50%, -50%)",
+
+                borderStyle:
+                  "dashed",
+
+                animation:
+                  "trackerRing 1450ms cubic-bezier(.16,1,.3,1) both",
+              }}
+            />
+
+
+            <div
+              className="
+                tracker-inner-ring
+                absolute
+                left-1/2
+                top-1/2
+                w-[76%]
+                h-[76%]
+                rounded-full
+                border
+                border-[#FFD400]/80
+              "
+              style={{
+                transform:
+                  "translate(-50%, -50%)",
+
+                borderStyle:
+                  "dashed",
+
+                animation:
+                  "trackerInnerRing 1250ms cubic-bezier(.16,1,.3,1) 100ms both",
+              }}
+            />
+
+
+            <div
+              className="
+                tracker-crosshair
+                absolute
+                left-1/2
+                top-1/2
+                w-[130px]
+                h-[130px]
+              "
+              style={{
+                transform:
+                  "translate(-50%, -50%)",
+
+                animation:
+                  "trackerCrosshair 1200ms cubic-bezier(.16,1,.3,1) 220ms both",
+              }}
+            >
+
+              <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/50 -translate-x-1/2" />
+
+              <div className="absolute top-1/2 left-0 right-0 h-px bg-white/50 -translate-y-1/2" />
+
+              <div className="absolute left-1/2 top-1/2 w-5 h-5 border-2 border-[#E62429] -translate-x-1/2 -translate-y-1/2 rotate-45" />
+
+            </div>
+
+
+            <div
+              className="
+                tracker-pulse
+                absolute
+                left-1/2
+                top-1/2
+                w-20
+                h-20
+                rounded-full
+                border
+                border-[#E62429]
+              "
+              style={{
+                transform:
+                  "translate(-50%, -50%)",
+
+                animation:
+                  "trackerPulse 1300ms ease-out 250ms both",
+              }}
+            />
+
+
+            <div
+              className="
+                tracker-dots
+                absolute
+                left-1/2
+                top-1/2
+                w-3
+                h-3
+                rounded-full
+                bg-[#FFD400]
+                shadow-[0_0_20px_#FFD400]
+              "
+              style={{
+                transform:
+                  "translate(-50%, -50%)",
+
+                animation:
+                  "trackerDots 1300ms ease-out 250ms both",
+              }}
+            />
+
+
+            <div
+              className="
+                tracker-scan
+                absolute
+                left-[4%]
+                right-[4%]
+                top-1/2
+                h-px
+                bg-[#E62429]
+                shadow-[0_0_14px_#E62429]
+              "
+              style={{
+                animation:
+                  "trackerScan 1250ms cubic-bezier(.16,1,.3,1) 250ms both",
+              }}
+            />
+
+
+            <div
+              className="
+                tracker-scan-glow
+                absolute
+                left-[4%]
+                right-[4%]
+                top-1/2
+                h-12
+                -translate-y-1/2
+                bg-gradient-to-b from-transparent via-[#E62429]/15 to-transparent
+                blur-sm
+              "
+              style={{
+                animation:
+                  "trackerScanGlow 1250ms ease 250ms both",
+              }}
+            />
+
+          </div>
+
+
+          <div
+            className="
+              tracker-text
+              absolute
+              left-1/2
+              bottom-[17%]
+              -translate-x-1/2
+              text-center
+              whitespace-nowrap
+            "
+            style={{
+              animation:
+                "trackerText 1550ms ease 120ms both",
+            }}
+          >
+
+            <p className="text-[#FFD400] text-[10px] md:text-xs font-black tracking-[0.35em]">
+              SPIDERTIH TRACKER
+            </p>
+
+
+            <p
+              className="
+                tracker-status
+                mt-2
+                text-white
+                text-xs
+                md:text-sm
+                font-mono
+                tracking-[0.22em]
+              "
+              style={{
+                animation:
+                  "trackerStatus 1750ms linear both",
+              }}
+            >
+              SCANNING SIGNAL...
+            </p>
+
+
+            <p
+              className="
+                tracker-acquired
+                absolute
+                left-1/2
+                top-full
+                mt-2
+                -translate-x-1/2
+                text-[#E62429]
+                text-xs
+                md:text-sm
+                font-mono
+                font-black
+                tracking-[0.22em]
+              "
+              style={{
+                animation:
+                  "trackerAcquired 1750ms ease both",
+              }}
+            >
+              SIGNAL ACQUIRED
+            </p>
+
+          </div>
+
+
+          <div
+            className="
+              tracker-interface
+              absolute
+              left-7
+              right-7
+              bottom-7
+              flex
+              items-end
+              justify-between
+              font-mono
+            "
+            style={{
+              animation:
+                "trackerInterface 1750ms cubic-bezier(.22,.8,.25,1) both",
+            }}
+          >
+
+            <div>
+
+              <p className="text-white/30 text-[8px] tracking-widest">
+                ROUTE
+              </p>
+
+              <p className="text-white/70 text-[9px] tracking-widest mt-1">
+                SECURE CHANNEL
+              </p>
+
+            </div>
+
+
+            <div className="text-right">
+
+              <p className="text-white/30 text-[8px] tracking-widest">
+                DESTINATION
+              </p>
+
+              <p className="text-[#FFD400] text-[9px] tracking-widest mt-1">
+                CONTACT // 001
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div
+            className="
+              tracker-flash
+              absolute
+              inset-0
+              bg-white
+              pointer-events-none
+            "
+            style={{
+              animation:
+                "trackerFlash 1750ms ease both",
+            }}
+          />
 
         </div>
       )}

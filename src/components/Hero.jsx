@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Hero() {
   return (
     <section
@@ -90,9 +92,7 @@ export default function Hero() {
 
             <div className="relative w-64 h-72 sm:w-72 sm:h-80 md:w-[340px] md:h-[430px] bg-[#FFD9C7] border-4 border-black shadow-[12px_12px_0px_#000] rotate-[-1.5deg] md:translate-y-5 overflow-hidden">
 
-              {/* =================================================
-                  FOTO PROFIL
-              ================================================= */}
+              {/* FOTO PROFIL */}
               <img
                 src="/assets/foto-profil.png"
                 alt="Foto profil Fatih Taqiyyuddin"
@@ -134,6 +134,7 @@ export default function Hero() {
                   STUDENT • DEVELOPER • PROBLEM SOLVER
                 </p>
               </div>
+
             </div>
           </div>
 
@@ -148,6 +149,7 @@ export default function Hero() {
               FRIENDLY NEIGHBORHOOD
             </p>
           </div>
+
         </div>
 
         {/* =====================================================
@@ -184,6 +186,7 @@ export default function Hero() {
 
             {/* STATUS */}
             <div className="flex flex-wrap items-center gap-3 mb-6">
+
               <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#FFD400] border-3 border-black text-black text-[10px] font-black tracking-widest shadow-[4px_4px_0px_#000]">
                 <span className="w-2 h-2 rounded-full bg-green-600 border border-black" />
                 AVAILABLE TO CONNECT
@@ -192,6 +195,7 @@ export default function Hero() {
               <span className="px-3 py-2 bg-white border-2 border-black text-black text-[10px] font-black tracking-widest rotate-[-2deg]">
                 2026
               </span>
+
             </div>
 
             {/* MAIN TITLE */}
@@ -200,55 +204,98 @@ export default function Hero() {
               style={{ WebkitTextStroke: "2px black" }}
             >
               FATIH
+
               <br />
+
               <span className="text-[#FFD9C7]">
                 TAQIYYUDDIN
               </span>
             </h1>
 
+            {/* NIM */}
+            <p
+              className="
+                mt-3
+                text-[#FFD400]
+                text-xs
+                md:text-sm
+                font-black
+                tracking-[0.18em]
+              "
+            >
+              NIM: 4253250057
+            </p>
+
             {/* ROLE */}
             <div className="mt-7 flex items-center gap-3">
+
               <div className="w-12 h-1 bg-[#FFD400]" />
 
               <p className="text-white font-black text-sm md:text-base tracking-[0.12em]">
                 COMPUTER SCIENCE STUDENT
               </p>
+
             </div>
 
             {/* DESCRIPTION */}
             <div className="mt-6 bg-black/25 border-l-4 border-[#FFD400] px-5 py-5 max-w-lg">
+
               <p className="text-white text-sm md:text-base leading-relaxed">
                 Mahasiswa Ilmu Komputer Universitas Negeri Medan yang tertarik
                 pada pengembangan aplikasi web &amp; mobile, pemecahan masalah,
                 dan eksplorasi teknologi.
               </p>
+
             </div>
 
-            {/* CTA */}
+            {/* =================================================
+                SINGLE PRIMARY CTA
+            ================================================= */}
             <div className="flex flex-wrap items-center gap-4 mt-8">
-              <a
-                href="#projects"
-                className="group inline-flex items-center gap-3 px-6 py-3.5 bg-[#FFD400] border-3 border-black text-black text-xs font-black tracking-widest shadow-[5px_5px_0px_#000] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all"
+
+              <Link
+                to="/identity"
+                className="
+                  group
+                  inline-flex
+                  items-center
+                  gap-3
+
+                  px-6
+                  py-3.5
+
+                  bg-[#FFD400]
+                  border-3
+                  border-black
+
+                  text-black
+                  text-xs
+                  font-black
+                  tracking-widest
+
+                  shadow-[5px_5px_0px_#000]
+
+                  hover:shadow-none
+                  hover:translate-x-1
+                  hover:translate-y-1
+
+                  transition-all
+                "
               >
-                LIHAT PROJECT
+                WHO IS THIS?
 
                 <span className="group-hover:translate-x-1 transition-transform">
                   →
                 </span>
-              </a>
+              </Link>
 
-              <a
-                href="#about"
-                className="inline-flex items-center gap-2 px-5 py-3.5 bg-white border-3 border-black text-black text-xs font-black tracking-widest shadow-[5px_5px_0px_#000] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all"
-              >
-                TENTANG SAYA
-              </a>
             </div>
 
             {/* MINI STATS */}
             <div className="grid grid-cols-3 gap-3 mt-10 max-w-lg">
 
               <div className="bg-[#8C1518] border-3 border-black p-3 shadow-[3px_3px_0px_#000]">
+
                 <p className="font-comic text-2xl text-[#FFD400]">
                   01
                 </p>
@@ -256,9 +303,11 @@ export default function Hero() {
                 <p className="text-[9px] text-white/70 font-black tracking-wider">
                   STUDENT
                 </p>
+
               </div>
 
               <div className="bg-[#8C1518] border-3 border-black p-3 shadow-[3px_3px_0px_#000]">
+
                 <p className="font-comic text-2xl text-[#FFD400]">
                   WEB
                 </p>
@@ -266,9 +315,11 @@ export default function Hero() {
                 <p className="text-[9px] text-white/70 font-black tracking-wider">
                   DEVELOPMENT
                 </p>
+
               </div>
 
               <div className="bg-[#8C1518] border-3 border-black p-3 shadow-[3px_3px_0px_#000]">
+
                 <p className="font-comic text-2xl text-[#FFD400]">
                   ∞
                 </p>
@@ -276,15 +327,20 @@ export default function Hero() {
                 <p className="text-[9px] text-white/70 font-black tracking-wider">
                   CURIOSITY
                 </p>
+
               </div>
+
             </div>
+
           </div>
 
           {/* COMIC NUMBER */}
           <span className="font-comic absolute -bottom-8 -right-2 text-black/[0.08] text-[180px] md:text-[250px] leading-none select-none pointer-events-none">
             01
           </span>
+
         </div>
+
       </div>
 
       {/* =========================================================
@@ -302,6 +358,7 @@ export default function Hero() {
           <span className="w-1 h-2 bg-current animate-bounce" />
         </span>
       </a>
+
     </section>
   );
 }

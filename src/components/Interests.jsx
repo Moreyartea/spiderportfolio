@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const interests = [
   {
     number: "01",
@@ -62,6 +64,7 @@ export default function Interests() {
           MAIN CONTENT
       ========================================================= */}
       <div className="relative max-w-6xl mx-auto">
+
         {/* SECTION LABEL */}
         <div className="flex flex-wrap items-center gap-4 mb-6">
           <span className="inline-block px-4 py-1.5 bg-[#FFD400] border-2 border-black text-black text-xs font-black tracking-wider shadow-[3px_3px_0px_#000] rotate-[-1deg]">
@@ -188,10 +191,12 @@ export default function Interests() {
             PERSONAL RHYTHM PANEL
         ===================================================== */}
         <div className="relative mt-9 bg-[#1A3FA0] border-4 border-black shadow-[8px_8px_0px_#000] p-6 md:p-8 rotate-[0.3deg]">
+
           {/* Decorative corner */}
           <div className="absolute top-5 right-5 w-7 h-7 bg-[#E62429] border-3 border-black rotate-12" />
 
           <div className="grid md:grid-cols-[0.7fr_1.5fr] gap-7 items-center">
+
             {/* LEFT */}
             <div>
               <p className="text-[#FFD400] text-[10px] font-black tracking-[0.2em] mb-2">
@@ -258,11 +263,44 @@ export default function Interests() {
             BOTTOM COMIC NOTE
         ===================================================== */}
         <div className="flex justify-end mt-7">
-          <div className="relative px-4 py-2 bg-black border-3 border-black shadow-[4px_4px_0px_#FFD400] rotate-[1deg]">
-            <span className="text-[#FFD400] text-[9px] md:text-[10px] font-black tracking-[0.15em]">
-              NEXT FILE → SKILLS
-            </span>
-          </div>
+
+          <Link
+            to="/missions"
+            className="
+              relative
+              inline-flex
+              items-center
+              px-4
+              py-2
+
+              bg-black
+              border-3
+              border-black
+              shadow-[4px_4px_0px_#FFD400]
+
+              !text-[#FFD400]
+              text-[9px]
+              md:text-[10px]
+              font-black
+              tracking-[0.15em]
+
+              rotate-[1deg]
+
+              hover:translate-x-[2px]
+              hover:translate-y-[2px]
+              hover:shadow-[2px_2px_0px_#FFD400]
+
+              active:translate-x-[4px]
+              active:translate-y-[4px]
+              active:shadow-none
+
+              transition-all
+              duration-150
+            "
+          >
+            NEXT FILE → MISSION
+          </Link>
+
         </div>
       </div>
     </section>

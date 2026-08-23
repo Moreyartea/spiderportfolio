@@ -26,7 +26,6 @@ export default function Motivation() {
           MOTIVASI SAYA
         </h2>
 
-        {/* === DUMMY CONTENT — GANTI DENGAN MOTIVASI ASLI FATIH === */}
         <div className="bg-[#FFF4E0] border-4 border-black shadow-[8px_8px_0px_#000] p-6 md:p-10 inline-block text-left rotate-[-0.3deg]">
           <p className="text-black/40 text-xs font-bold tracking-wider mb-3">
             [ HUBUNGAN ANTARA CITA-CITA DAN KEPRIBADIAN ]

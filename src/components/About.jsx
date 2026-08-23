@@ -303,7 +303,7 @@ export default function About() {
         <div className="flex justify-end mt-7">
           <div className="relative px-4 py-2 bg-black border-3 border-black shadow-[4px_4px_0px_#E62429] rotate-[1deg]">
             <span className="text-[#FFD400] text-[9px] md:text-[10px] font-black tracking-[0.15em]">
-              NEXT FILE → PERSONAL STUFF
+              NEXT FILE → MY IDENTITY
             </span>
           </div>
         </div>
